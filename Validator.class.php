@@ -1,7 +1,9 @@
 <?php
 
+
+use Exception;
 /**
- * Form validator class
+ * 字段验证
  */
 class validator
 {
