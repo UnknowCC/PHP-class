@@ -1,11 +1,11 @@
 <?php
 
 
-use Exception;
+use \Exception;
 /**
  * 字段验证
  */
-class validator
+class ValidatorForm
 {
     /**
      * 需要验证的数据
