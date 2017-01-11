@@ -45,6 +45,70 @@ class GisLocation
 
 		return (($sum % 2) ? true : false);
 	}
+
+	/**
+	 * 地球半径(km)
+	 * @var float
+	 */
+	public static $earchRadius = 6371.0;
+
+	/**
+	 * 根据Haversine公式求圆形两点间的距离
+	 * 公式原型
+	 * 		haversin(d/R) = haversin($lat2 - $lat1) + cos($lat1) * cos($lat2) 
+	 * 			* haversin($lon2 - $lon1)
+	 * 		haversin($) = pow(sin($ / 2), 2) = (1 - cos($)) / 2
+	 * @param  float $lat1 
+	 * @param  float $lon1 
+	 * @param  float $lat2 
+	 * @param  float $lon2 
+	 * @return float       
+	 */
+	public static function distance($lat1, $lon1, $lat2, $lon2)
+	{
+		$lat1 = static::convertDegreesToRadians($lat1);
+		$lon1 = static::convertDegreesToRadians($lon1);
+		$lat2 = static::convertDegreesToRadians($lat2);
+		$lon2 = static::convertDegreesToRadians($lon2);
+
+		$diffLat = abs($lat1 - $lat2);
+		$diffLon = abs($lon1 - $lon2);
+
+		$h = static::haverSin($diffLat) + cos($lat1) * cos($lat2) * static::haverSin($diffLon);
+		$distance = 2 * static::$earchRadius * asin(sqrt($h));
+		return $distance;
+	}
+
+	/**
+	 * Haversine
+	 * @param  float $theta 
+	 * @return float        
+	 */
+	public static function haverSin($theta)
+	{
+		$hs = sin($theta);
+		return $hs * $hs;
+	}
+
+	/**
+	 * 将角度换算成弧度
+	 * @param  float $degrees 
+	 * @return float          
+	 */
+	public static function convertDegreesToRadians($degrees)
+	{
+		return $degrees * pi() / 180;
+	}
+
+	/**
+	 * 将弧度换算成角度
+	 * @param  float $radians 
+	 * @return float          
+	 */
+	public static function convertRadiansToDegrees($radians)
+	{
+		return $radians * 180.0 / pi();
+	}
 }
 
 /*
@@ -74,3 +138,5 @@ $result = GisTest::isPtInPoly($x, $y, $ps);
 var_dump($result);
 
 */
+
+// echo GisLocation::distance(120.2043,30.2795,120.2043,30.2796);
